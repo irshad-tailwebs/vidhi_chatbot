@@ -1,0 +1,73 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Chatbot</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Only keeping essential custom styles that aren't easily replicated with Tailwind */
+        .message {
+            word-wrap: break-word;
+        }
+        #chat-container {
+            scroll-behavior: smooth;
+            height: calc(100vh - 160px);
+        }
+        @media (max-width: 640px) {
+            .chatbox {
+                height: 100vh;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                border-radius: 0;
+                display: flex;
+                flex-direction: column;
+            }
+            #chat-container {
+                flex-grow: 1;
+                height: calc(100vh - 140px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Main container with responsive classes -->
+    <div class="chatbox bg-white shadow-lg md:max-w-2xl md:mx-auto md:my-5 md:rounded-lg">
+        <!-- Header -->
+        <div class="sticky top-0 bg-white p-4 border-b border-gray-200 z-10">
+            <h2 class="text-xl font-bold text-center">Legal Chatbot 🏛️</h2>
+        </div>
+
+        <!-- Chat Container -->
+        <div id="chat-container" class="p-4 overflow-y-auto">
+            <!-- Messages will appear here -->
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="text-center text-red-500 px-4"></div>
+
+        <!-- Input Area -->
+        <div class="sticky bottom-0 bg-white border-t border-gray-200 p-4">
+            <div class="flex space-x-2">
+                <input 
+                    type="text" 
+                    id="user-query" 
+                    class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Ask your legal question..."
+                    onkeypress="handleKeyPress(event)"
+                />
+                <button 
+                    id="send-button" 
+                    class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
+                    onclick="sendQuery()"
+                >
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

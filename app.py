@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import pandas as pd
 import numpy as np
 from sentence_transformers import SentenceTransformer
@@ -7,6 +7,7 @@ from flask_cors import CORS
 import torch
 import re
 import random
+import os
 
 class HumanLikeLegalChatbot:
     def __init__(self, csv_path, model_name='all-MiniLM-L6-v2'):
@@ -210,11 +211,21 @@ class HumanLikeLegalChatbot:
 # Flask setup
 app = Flask(__name__)
 
-CORS(app, resources={r"/ask": {"origins": "*", "methods": ["POST", "OPTIONS"]}})
+CORS(app, resources={
+    r"/*": {
+        "origins": ["*"],
+        "methods": ["GET", "POST", "OPTIONS"]
+    }
+})
 
 # Initialize chatbot instance
-CSV_PATH = 'legal_database.csv'  # Set your CSV path here
+CSV_PATH = 'legal_database.csv'
 chatbot = HumanLikeLegalChatbot(CSV_PATH)
+
+@app.route('/')
+def home():
+    """Serve the chat interface."""
+    return render_template('index.html')
 
 @app.route('/ask', methods=['POST'])
 def ask():
@@ -223,7 +234,6 @@ def ask():
         query = request.json.get('query', '').strip().lower()
         print(f"Received query: {query}")
         
-        # Handle greetings
         greetings = ['hi', 'hello', 'hey', 'greetings', 'howdy']
         if query in greetings:
             return jsonify({"response": "🤖 Hello! How can I assist you with legal matters today?"})
@@ -231,7 +241,6 @@ def ask():
         if not query:
             return jsonify({"error": "Query is required."}), 400
         
-        # Get response from chatbot
         response = chatbot.get_response(query)
         return jsonify({"response": response})
     
@@ -239,4 +248,5 @@ def ask():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port)
