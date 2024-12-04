@@ -248,6 +248,8 @@ class HumanLikeLegalChatbot:
         print("Ask about laws, offences, or legal implications.")
         print("Type 'quit' to exit. 👋")
         print("-" * 50)
+
+        greetings = ['hi', 'hello', 'hey', 'greetings', 'howdy']
         
         while True:
             try:
@@ -256,6 +258,10 @@ class HumanLikeLegalChatbot:
                 if user_input.lower() in ['quit', 'exit', 'bye']:
                     print("Thank you for consulting me. Stay legally informed! 👨‍⚖️")
                     break
+
+                if user_input in greetings:
+                    print("\n🤖 Hello! How can I assist you with legal matters today?")
+                    continue
                 
                 response = self.get_response(user_input)
                 print("\n" + response)
