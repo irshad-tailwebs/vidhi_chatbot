@@ -10,7 +10,7 @@ import random
 import os
 
 class HumanLikeLegalChatbot:
-    def __init__( , csv_path, model_name='all-MiniLM-L6-v2'):
+    def __init__(self, csv_path, model_name='all-MiniLM-L6-v2'):
         """
         Initialize the conversational legal AI assistant.
         """
